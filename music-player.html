@@ -1,0 +1,30 @@
+<audio id="bgm" loop>
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const audio = document.getElementById("bgm");
+
+// Ambil posisi terakhir
+audio.currentTime = localStorage.getItem("musicTime") ? Number(localStorage.getItem("musicTime")) : 0;
+
+// Mulai jika ON
+if (localStorage.getItem("musicOn") === "true") audio.play();
+
+// Simpan posisi setiap 300ms
+setInterval(() => {
+    localStorage.setItem("musicTime", audio.currentTime);
+}, 300);
+
+// Terima pesan ON/OFF dari halaman lain
+window.addEventListener("message", (event) => {
+    if (event.data === "music_on") {
+        audio.play();
+        localStorage.setItem("musicOn", "true");
+    }
+    if (event.data === "music_off") {
+        audio.pause();
+        localStorage.setItem("musicOn", "false");
+    }
+});
+</script>

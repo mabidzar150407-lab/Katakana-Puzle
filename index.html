@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Menu Utama</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f2f2f2;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .menu-container {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    h1 { margin-bottom: 40px; }
+
+    .menu-button {
+        display: block;
+        width: 200px;
+        padding: 15px;
+        margin: 15px auto;
+        background: #4CAF50;
+        color: white;
+        text-decoration: none;
+        font-size: 22px;
+        border-radius: 10px;
+        transition: 0.3s;
+    }
+
+    .menu-button:hover {
+        background: #45a049;
+    }
+
+    #musicToggle {
+        padding: 12px 20px;
+        font-size: 18px;
+        border-radius: 10px;
+        background: #2196F3;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+
+<div class="menu-container">
+    <h1>Kana Training🥀</h1>
+
+    <a class="menu-button" href="puzzle.html">Puzzle</a>
+    <a class="menu-button" href="library.html">Library</a>
+</div>
+
+<button id="musicToggle">Music: Off</button>
+
+<!-- IFRAME PEMUTAR MUSIK -->
+<iframe src="music-player.html" style="display:none;" id="musicFrame"></iframe>
+
+<!-- SCRIPT PENGENDALI MUSIK -->
+<script>
+const btn = document.getElementById("musicToggle");
+const frame = document.getElementById("musicFrame");
+
+function updateButton() {
+    const status = localStorage.getItem("musicOn") === "true";
+    btn.textContent = "Music: " + (status ? "On" : "Off");
+}
+
+btn.onclick = () => {
+    const status = localStorage.getItem("musicOn") === "true";
+
+    if (status) {
+        frame.contentWindow.postMessage("music_off", "*");
+        localStorage.setItem("musicOn", "false");
+    } else {
+        frame.contentWindow.postMessage("music_on", "*");
+        localStorage.setItem("musicOn", "true");
+    }
+    updateButton();
+};
+
+updateButton();
+</script>
+
+</body>
+</html>
