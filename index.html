@@ -3,68 +3,166 @@
 <head>
 <meta charset="UTF-8">
 <title>Menu Utama</title>
+
 <style>
     body {
-        font-family: Arial, sans-serif;
-        background: #f2f2f2;
+        margin: 0;
+        padding: 0;
+        font-family: "Poppins", sans-serif;
+
+        background: linear-gradient(135deg, #ffeef5 0%, #ffd9e8 100%);
+        min-height: 100vh;
+
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        height: 100vh;
-        margin: 0;
+
+        /* ubah dari hidden → auto */
+        overflow-x: hidden;
+        overflow-y: auto;
     }
 
-    .menu-container {
+    /* Judul */
+    h1 {
+        font-size: 42px;
+        font-weight: 700;
+        margin-bottom: 40px;
+        color: #cc3366;
+        letter-spacing: 2px;
+        text-shadow: 0px 3px 6px rgba(255, 120, 180, 0.4);
         text-align: center;
-        margin-bottom: 30px;
     }
 
-    h1 { margin-bottom: 40px; }
-
-    .menu-button {
-        display: block;
-        width: 200px;
-        padding: 15px;
-        margin: 15px auto;
-        background: #4CAF50;
-        color: white;
-        text-decoration: none;
-        font-size: 22px;
-        border-radius: 10px;
-        transition: 0.3s;
+    /* Container tombol */
+    .menu-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        width: 260px;
     }
 
-    .menu-button:hover {
-        background: #45a049;
-    }
-
-    #musicToggle {
-        padding: 12px 20px;
+    /* Tombol menu */
+    .menu-btn {
+        padding: 14px 20px;
+        background: #fff0f6;
+        border-radius: 14px;
+        border: 2px solid #ffb3d9;
         font-size: 18px;
-        border-radius: 10px;
-        background: #2196F3;
-        color: white;
-        border: none;
+        font-weight: bold;
         cursor: pointer;
+        text-decoration: none;
+        color: #b30059;
+        text-align: center;
+        transition: 0.25s;
+        box-shadow: 0 4px 14px rgba(255, 140, 180, 0.3);
     }
+
+    .menu-btn:hover {
+        background: #ff66a3;
+        color: white;
+        border-color: #ff66a3;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(255, 80, 120, 0.4);
+    }
+
+    /* Tombol Musik */
+    #musicToggle {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        background: #ff66a3;
+        padding: 12px 18px;
+        color: white;
+        border-radius: 14px;
+        cursor: pointer;
+        border: none;
+        font-size: 16px;
+        transition: 0.2s;
+        box-shadow: 0 4px 12px rgba(255, 80, 120, 0.4);
+    }
+
+    #musicToggle:hover {
+        background: #ff85b8;
+    }
+
+    /* Sakura */
+    .sakura {
+        position: fixed;
+        top: -10px;
+        width: 15px;
+        height: 15px;
+        background: pink;
+        border-radius: 50%;
+        opacity: 0.8;
+        animation: fall linear infinite;
+        pointer-events: none;
+    }
+
+    @keyframes fall {
+        0% { transform: translateY(0px) rotate(0deg); }
+        100% { transform: translateY(110vh) rotate(360deg); }
+    }
+
+    /* ========= 📱 MOBILE OPTIMIZATION ========== */
+    @media (max-width: 480px) {
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 25px;
+        }
+
+        .menu-container {
+            width: 200px;
+        }
+
+        .menu-btn {
+            font-size: 16px;
+            padding: 12px 15px;
+        }
+
+        #musicToggle {
+            bottom: 15px;
+            right: 15px;
+            font-size: 14px;
+            padding: 10px 14px;
+        }
+    }
+
+    @media (max-width: 360px) {
+        h1 {
+            font-size: 24px;
+        }
+    }
+
 </style>
 </head>
 <body>
 
-<div class="menu-container">
-    <h1>Kana Training🥀</h1>
+<h1>Kana Training 🌸</h1>
 
-    <a class="menu-button" href="puzzle.html">Puzzle</a>
-    <a class="menu-button" href="library.html">Library</a>
+<div class="menu-container">
+    <a class="menu-btn" href="puzzle.html">Puzzle</a>
+    <a class="menu-btn" href="library.html">Library</a>
 </div>
 
 <button id="musicToggle">Music: Off</button>
-
-<!-- IFRAME PEMUTAR MUSIK -->
 <iframe src="music-player.html" style="display:none;" id="musicFrame"></iframe>
 
-<!-- SCRIPT PENGENDALI MUSIK -->
+<script>
+function createSakura() {
+    const sak = document.createElement("div");
+    sak.classList.add("sakura");
+    sak.style.left = Math.random() * window.innerWidth + "px";
+    sak.style.animationDuration = 4 + Math.random() * 6 + "s";
+    sak.style.opacity = 0.6 + Math.random() * 0.4;
+    document.body.appendChild(sak);
+    setTimeout(() => sak.remove(), 11000);
+}
+
+setInterval(createSakura, 450); // dikurangi sedikit agar ringan di HP
+</script>
+
 <script>
 const btn = document.getElementById("musicToggle");
 const frame = document.getElementById("musicFrame");
@@ -76,7 +174,6 @@ function updateButton() {
 
 btn.onclick = () => {
     const status = localStorage.getItem("musicOn") === "true";
-
     if (status) {
         frame.contentWindow.postMessage("music_off", "*");
         localStorage.setItem("musicOn", "false");
